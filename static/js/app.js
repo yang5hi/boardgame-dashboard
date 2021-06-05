@@ -7,22 +7,8 @@ d3.select("#gameSelect").on("change", UpdatePage);
 function UpdatePage() {
     d3.json("data/game_info.json").then(function(gameInfo) {
         d3.json("data/ranking.json").then(function(ranking) {
-            
             // store the top200 list to topGames variable
             let topGames=Object.values(gameInfo).filter(a=>a.is_top200==true);
-            // sort by game_name
-            topGames.sort(function(a, b) {
-                var nameA = a.game_name.toUpperCase(); // ignore upper and lowercase
-                var nameB = b.game_name.toUpperCase(); // ignore upper and lowercase
-                if (nameA < nameB) {
-                return -1;
-                }
-                if (nameA > nameB) {
-                return 1;
-                }
-                // names must be equal
-                return 0;
-            });
             console.log(topGames);
             // apppend the game names to the dropdown menu
             // d3.select("#gameSelect").html(""); // clear the previrous options
@@ -37,16 +23,18 @@ function UpdatePage() {
             d3.select("#game-info-basic").html(""); // clear the previrous paragraphs
             // match the name with game info
             let selectedInfo=topGames.filter(game => game.game_name.includes(selectedGame));
-            console.log(selectedInfo); // validate the selected game info
-            // // output the game Info to DOM
-            // selectedMeta.forEach(demoInfo=> {
-            //     Object.entries(demoInfo).forEach(([key,value])=> {
-            //         d3.select("#sample-metadata").append("p").append("strong").text(`${key}: ${value}`);
-            //     })
-            // });
-            // 
-        });
 
+            // output the game Info to DOM
+            var gameInfoBox=selectedInfo[0];
+            console.log(gameInfoBox); // validate the selected game info
+            Object.entries(gameInfoBox).forEach(([key,value])=> {
+                if (['description', 'yearpublished','minage','minplayers','maxplayers'].includes (key)){
+                    d3.select("#game-info-basic").append("p").append("strong").text(`${key}: ${value}`);
+                } else if (key=='gamelink') {
+                    d3.select("#game-info-basic").append("p").append("strong").text(`${key}: https://boardgamegeek.com${value}`);
+                }
+            });
+        });
     });
 };
 // function PlotBubble(otuIds, sampleValues,selectedList, selectedId){
