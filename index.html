@@ -64,26 +64,20 @@
     <br>
     <div class="row">
         <div class="col-md-3">
-            <div class="card mb-3" id="latest_news">
-                <h3 class="card-header"><strong>BoardGameGeek News</strong></h3>
-                <div class="card-body">
-                  <h5 class="card-title">News Title</h5>
-                </div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
-                  <rect width="100%" height="100%" fill="#868e96"></rect>
-                  <text x="50%" y="50%" fill="#dee2e6" dy=".3em">News Image</text>
-                </svg>
-                <div class="card-body">
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                <div class="card-body">
-                  <a href="#" class="card-link">News link</a>
-                </div>
-                <div class="card-footer text-muted">
-                  Jun 2 2021
-                </div>
-              </div>
+          <div class="form-group">
+              <h5 for="exampleSelect1" class="form-label mt-4"><strong>Choose a Game</strong></h5>
+              <select class="form-select" id="gameSelect">
+              </select>
+          </div>
+          <br>
+          <div class="panel panel-default">
+          <div class="panel-heading">
+              <h5 class="panel-title">Game Info</h5>
+          </div>
+          <div id="game-info-basic" class="panel-body"></div>
+          </div>
         </div>
+
         <div class="col-md-6">
             <div id="line_popularity">
                 <div class="alert alert-dismissible alert-warning">
@@ -93,46 +87,42 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-3">
-            <div class="form-group">
-                <h5 for="exampleSelect1" class="form-label mt-4"><strong>Choose a Game</strong></h5>
-                <select class="form-select" id="gameSelect">
-                </select>
-            </div>
-            <br>
-            <div class="panel panel-default">
-            <div class="panel-heading">
-                <h5 class="panel-title">Game Info</h5>
-            </div>
-            <div id="game-info-basic" class="panel-body"></div>
+          <div class="card mb-3" id="latest_news">
+              <h3 class="card-header"><strong>BoardGameGeek News</strong></h3>
+              <div class="card-body">
+                <h5 class="card-title">News Title</h5>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
+                <rect width="100%" height="100%" fill="#868e96"></rect>
+                <text x="50%" y="50%" fill="#dee2e6" dy=".3em">News Image</text>
+              </svg>
+              <div class="card-body">
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              </div>
+              <div class="card-body">
+                <a href="#" class="card-link">News link</a>
+              </div>
+              <div class="card-footer text-muted">
+                Jun 2 2021
+              </div>
             </div>
         </div>
+
+    </div>
+    <br>
+    <div class="row col-md-12">
+        <div id="bubble"></div>
     </div>
     <br>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div id="game_graph_1">
-            <div class="alert alert-dismissible alert-danger">
-                <h4 class="alert-heading">id="game_graph_1"</h4>
-                <p class="mb-0">This will be the area to put a graph</p>
-            </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div id="game_graph_2">
-            <div class="alert alert-dismissible alert-success">
-                <h4 class="alert-heading">id="game_graph_2"</h4>
-                <p class="mb-0">This will be the area to put a graph</p>
-            </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div id="game_graph_3">
-            <div class="alert alert-dismissible alert-info">
-                <h4 class="alert-heading">id="game_graph_3"</h4>
-                <p class="mb-0">This will be the area to put a graph</p>
-            </div>
-        </div>
+      <div class="col-md-6 radar_div">
+          <canvas id="myChart"></canvas>
       </div>
     </div>
   </div>
@@ -152,6 +142,8 @@
   <!-- Our JavaScript -->
   <script type="text/javascript" src="static/js/logic.js"></script>
   <script type="text/javascript" src="./static/js/app.js"></script>
+  <!-- Char.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
 
