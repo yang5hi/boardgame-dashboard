@@ -16,22 +16,32 @@ function UpdatePage() {
                 topGames.forEach(game => d3.select("#gameSelect").append("option").text(game.game_name));
                 option_counter=1;
             };
-            //-------------------------update slected game info---------------------------------------
+            //-------------------------update selected game info---------------------------------------
             // get the game name from the dropdown menu
             let selectedGame=d3.select("#gameSelect").property("value");
             console.log(selectedGame); // validate game name
-            d3.select("#game-info-basic").html(""); // clear the previrous paragraphs
+            d3.select("#game-info-basic").html(""); // clear the previous paragraphs
             // match the name with game info
             let selectedInfo=topGames.filter(game => game.game_name.includes(selectedGame));
-
+            
             // output the game Info to DOM
             var gameInfoBox=selectedInfo[0];
             console.log(gameInfoBox); // validate the selected game info
             Object.entries(gameInfoBox).forEach(([key,value])=> {
-                if (['description', 'yearpublished','minage','minplayers','maxplayers'].includes (key)){
-                    d3.select("#game-info-basic").append("p").append("strong").text(`${key}: ${value}`);
+                if (['description'].includes (key)){
+                    d3.select("#game-info-basic").append("p").append("strong").text(`Description: ${value}`);
+                } else if (key=='boardgamecategory') {
+                    d3.select("#game-info-basic").append("p").append("strong").text(`Categories: ${value}`);
+                } else if (key=='yearpublished') {
+                    d3.select("#game-info-basic").append("p").append("strong").text(`Year Published: ${value}`);
+                } else if (key=='minage') {
+                    d3.select("#game-info-basic").append("p").append("strong").text(`Minimum Age: ${value}`);
+                } else if (key=='minplayers') {
+                    d3.select("#game-info-basic").append("p").append("strong").text(`Players (min): ${value}`);
+                } else if (key=='maxplayers') {
+                    d3.select("#game-info-basic").append("p").append("strong").text(`Players (max): ${value}`);
                 } else if (key=='gamelink') {
-                    d3.select("#game-info-basic").append("p").append("strong").text(`${key}: https://boardgamegeek.com${value}`);
+                    d3.select("#game-info-basic").append("p").append("strong").text(`Link to Game: https://boardgamegeek.com${value}`);
                 }
             });
         });
