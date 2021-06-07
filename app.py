@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect
 from flask_pymongo import PyMongo
-import scrape_boardgame
+import scrape_bgg
 
 # Create an instance of Flask
 app = Flask(__name__)
@@ -18,7 +18,7 @@ def index():
 @app.route("/scrape")
 def scraper():
     # Run the scrape function
-    boardgame_data = scrape_boardgame.scrape()
+    boardgame_data = scrape_bgg.scrape()
     # Update the Mongo database using update and upsert=True
     mongo.db.collection.update({}, boardgame_data, upsert=True)
     # Redirect back to home page
