@@ -1,0 +1,100 @@
+# Dependencies
+import time
+import pandas as pd
+import numpy as np
+import os
+import re
+import requests
+from bs4 import BeautifulSoup
+
+def scrape():
+    game_info_df=pd.read_csv("data/boardgames2_06022021.csv")
+    ranking_df=pd.read_csv("data/2021-05-29_game_id_rankings.csv")
+
+    # get the top 200 rankings
+    ranking_df.drop_duplicates(subset=['BoardGameRank'], inplace=True)
+    ranking_df.fillna(0, inplace=True)
+    ranking_int_df=ranking_df.astype('int64')
+    ranking_int_df['BoardGameRank'] = ranking_int_df.BoardGameRank.astype(str)
+    ranking_200_df=ranking_int_df.head(200).copy()
+    ranking_200_df.set_index('BoardGameRank', inplace=True)
+    ranking_200_dict=ranking_200_df.to_dict()
+
+    # check if any game in the top 200 list is not the 20k game info list
+    game_id_list=game_info_df['objectid']
+    game_20k_list=[*game_id_list]
+    game_20k_set=set(game_20k_list)
+
+    game_ids=[]
+    for i in range(200):
+        game_id=ranking_200_df.iloc[i].unique()
+        game_ids.extend(game_id)
+    unique_game_ids=set(game_ids)
+    unique_game_ids.remove(0)
+
+    game_out=0
+    for game_id in unique_game_ids:
+        if game_id not in game_20k_set:
+            print(f'{game_id} not found')
+            game_out+=1
+    print(f'there are/is {game_out} game(s) from top 200 games that not cover in the 20k game info')
+
+
+    # add a column "is_top200" to game_info_df
+    is_top200_list=[]
+    for game_id in game_info_df['objectid']:
+        if game_id in unique_game_ids:
+            is_top200_list.append(True)
+        else:
+            is_top200_list.append(False)
+    game_info_df['is_top200']=is_top200_list
+
+    # convert unicode to printable format
+    a=game_info_df['name']
+    kk=[]
+    for b in a:
+        b=re.sub('\s\s+', ' ', b)
+        try:
+            c=(b.encode('utf-8').decode('unicode-escape'))
+            kk.append(c)
+        except:
+            x=b.replace('\\u','/u').replace('\\', "").replace('/u','\\u')
+            c=(x.encode('utf-8').decode('unicode-escape'))
+            kk.append(c)
+    game_info_df['game_name']=kk
+
+    # parse the category, publisher, and mechanic info
+    bg_cat=game_info_df['boardgamecategory']
+    game_info_df['boardgamecategory']=[cc[1:-1].replace("'",'').split(",") for cc in bg_cat]
+    bg_pub=game_info_df['boardgamepublisher']
+    game_info_df['boardgamepublisher']=[cc[1:-1].replace("'",'').split(",") for cc in bg_pub]
+    bg_mec=game_info_df['boardgamemechanic']
+    game_info_df['boardgamemechanic']=[cc[1:-1].replace("'",'').split(",") for cc in bg_mec]
+
+    # get only the needed columns
+    game_info_selected_df=game_info_df[['objectid', 'game_name', 'description', 'yearpublished','is_top200',
+                                        'average','numplays','maxplaytime','minage', 'languagedependence',
+                                        'minplayers','maxplayers', 'minplaytime','gamelink']].copy()
+    # drop the duplicates based on objectid
+    game_info_selected_df.drop_duplicates(subset=['objectid'], inplace=True)
+    game_info_selected_df['objectid'] = game_info_selected_df.objectid.astype(str)
+    game_info_selected_df=game_info_selected_df.sort_values(by=['game_name']).reset_index(drop=True)
+    game_info_selected_df.set_index('objectid', inplace=True)
+    game_info_dict=game_info_selected_df.to_dict('index')
+
+
+    # URL of page to be scraped
+    url = 'https://boardgamegeek.com/blog/1/boardgamegeek-news'
+    # Retrieve page with the requests module
+    response = requests.get(url)
+    # Create BeautifulSoup object; parse with 'html.parser'
+    soup = BeautifulSoup(response.text, 'html.parser')
+    news_titles = soup.find(class_='blog_post')
+    # find the news title and image
+    news_title = news_titles.find(class_='post_title').text
+    featured_image_url = soup.find(class_="post-img").a.img['src']
+
+    # organize all scraped data into one dictionary
+    boardgame_data={"news_title":news_title, "featured_image_url":featured_image_url}#,"ranking":ranking_200_dict,"game_info":game_info_dict}
+
+    return boardgame_data
