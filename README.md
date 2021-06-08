@@ -9,6 +9,5 @@ The user can choose daily rankings from a drop-down menu. A top 200 game list wi
 ## References
 
 - BoardGameGeek
-- Kaggle BoardGameGeek Reviews
 - Kaggle 20,000 Boardgames Dataset
 - Kaggle Board Game Geek Rankings

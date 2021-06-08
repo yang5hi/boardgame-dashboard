@@ -1,3 +1,10 @@
+console.log({boardgame_data});
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+today = mm + '/' + dd + '/' + yyyy;
+d3.select(".card-footer").append('p').text(today);
 // Initialize the page
 UpdatePage();
 var option_counter=0
@@ -52,7 +59,7 @@ function UpdatePage() {
             // get the list for the ranking and time
             let rankingList=Object.entries(ranking).map(([key,value]) => {
                 var top200=value;
-                var wklRank=-5;
+                var wklRank=205;
                 Object.entries(top200).filter(([key,value])=> {
                   if (value==selectedId) {
                     wklRank=key;
@@ -165,7 +172,7 @@ function PlotLine(selectedGame,rankingList){
   var trace1 = {
     x: rankingList.map(a=>a[0]),
     y: rankingList.map(a=>a[1]),
-    mode: 'markers',
+    mode: 'line',
     marker: {
       color: 'rgb(64,239,182)',
       size: 6

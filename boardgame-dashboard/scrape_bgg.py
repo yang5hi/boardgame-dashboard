@@ -9,8 +9,8 @@ from bs4 import BeautifulSoup
 from webdriver_manager.chrome import ChromeDriverManager
 
 def scrape():
-    game_info_df=pd.read_csv("data/boardgames2_06022021.csv")
-    ranking_df=pd.read_csv("data/2021-05-29_game_id_rankings.csv")
+    game_info_df=pd.read_csv("templates/data/boardgames2_06022021.csv")
+    ranking_df=pd.read_csv("templates/data/2021-05-29_game_id_rankings.csv")
 
     # get the top 200 rankings
     ranking_df.drop_duplicates(subset=['BoardGameRank'], inplace=True)
@@ -19,7 +19,6 @@ def scrape():
     rank_int_df=ranking_df.astype('int64')
     ranking_200_df=rank_int_df.head(200).copy()
     ranking_200_dict=ranking_200_df.to_dict()
-    ranking_200_json=ranking_200_df.to_json('data/ranking.json')
 
     # check if any game in the top 200 list is not the 20k game info list
     game_id_list=game_info_df['objectid']
@@ -78,7 +77,6 @@ def scrape():
                                     'boardgamepublisher', 'boardgamecategory', 'boardgamemechanic','gamelink']].copy()
     game_info_selected_df.drop_duplicates(subset=['objectid'], inplace=True)
     game_info_selected_df=game_info_selected_df.sort_values(by=['game_name']).reset_index(drop=True)
-    game_info_json=game_info_selected_df.T.to_json('data/game_info.json')
     game_info_dict=game_info_selected_df.T.to_dict()
 
 
@@ -91,7 +89,7 @@ def scrape():
     # Retrieve the page
     browser.visit(url)
     # Wait for 2 seconds to load the page
-    time.sleep(2)
+    time.sleep(1)
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
     # Examine the results, then determine element that contains sought info
@@ -99,16 +97,11 @@ def scrape():
     news_titles = soup.find(class_='blog_post')
     # find the news title and image
     news_title = news_titles.find(class_='post_title').text
-    print(news_title)
     featured_image_url = soup.find(class_="post-img").a.img['src']
-    print(f"featured_image_url: {featured_image_url}")
-
-
 
     # organize all scraped data into one dictionary
-    bgg_data={"news_title":news_title, "featured_image_url":featured_image_url,"ranking":ranking_200_dict,
-                "game_info":game_info_dict}
+    boardgame_data={"news_title":news_title, "featured_image_url":featured_image_url}#,"ranking":ranking_200_dict}#,"game_info":game_info_dict}
 
     browser.quit()
 
-    return bgg_data
+    return boardgame_data
