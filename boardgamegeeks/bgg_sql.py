@@ -27,7 +27,7 @@ def scrape():
     news_titles = soup.find(class_='blog_post')
     # find the news title and image
     news_title = news_titles.find(class_='post_title').text.strip('\n')
-    featured_image_url = soup.find(class_="post-img").a.img['src']
+    featured_image_url = soup.find(class_="post-img").a.img['src'].strip('\n')
     news_df=pd.DataFrame([{"news_title":news_title}, {"featured_image_url":featured_image_url}])
 
     # get the top 200 rankings
@@ -79,7 +79,7 @@ def scrape():
     kk=[]
     for b in a:
         b=re.sub(r'[^\x20-\x7F]',r'', b)
-        b=b.replace('"',"")
+        b=b.replace('"',"|")
         kk.append(b)
     game_info_df['game_description']=kk
     game_info_df = game_info_df.replace(to_replace= r'\\', value= '', regex=True)  

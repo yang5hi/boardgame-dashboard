@@ -1,33 +1,38 @@
 var jsNewsData = JSON.parse(newsData);
 var jsRankingData = JSON.parse(rankingData);
 var jsGameData = JSON.parse(gameData);
+// console.log(jsNewsData)
 // console.log(jsRankingData);
 
 // Initialize the page
-  d3.select(".card-title").text(`${jsNewsData.news_title[0]}`)
-  d3.select("#news-image").attr("src",`${jsNewsData.featured_image_url[0]}`)
-  // store the top200 list to topGames variable
-  var dropdownfrm=d3.select(".form-select")
-  let topGames=Object.values(jsGameData).filter(a=>a.is_top200==true);
-  topGames=topGames.sort(function(a, b) {
-    var nameA = a.game_name; // ignore upper and lowercase
-    var nameB = b.game_name; // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    // names must be equal
-    return 0;
-  });
-  // console.log(topGames);
-  dropdownfrm.selectAll("option").remove()
-  // apppend the game names to the dropdown menu
-  topGames.forEach(game=> dropdownfrm.append("option").text(game.game_name));
+var newsTitle=Object.values(jsNewsData.news_title).filter(value=>value !=null)
+var imgUrl=Object.values(jsNewsData.featured_image_url).filter(value=>value !=null)
+// console.log(newsTitle);
+// console.log(imgUrl);
+d3.select(".card-title").text(`${newsTitle}`)
+
+d3.select("#news-image").attr("src",`${imgUrl}`)
+// store the top200 list to topGames variable
+var dropdownfrm=d3.select(".form-select")
+let topGames=Object.values(jsGameData).filter(a=>a.is_top200==true);
+topGames=topGames.sort(function(a, b) {
+  var nameA = a.game_name; // ignore upper and lowercase
+  var nameB = b.game_name; // ignore upper and lowercase
+  if (nameA < nameB) {
+    return -1;
+  }
+  if (nameA > nameB) {
+    return 1;
+  }
+  // names must be equal
+  return 0;
+});
+// console.log(topGames);
+dropdownfrm.selectAll("option").remove()
+// apppend the game names to the dropdown menu
+topGames.forEach(game=> dropdownfrm.append("option").text(game.game_name));
 UpdatePage();
 UpdateDate();
-var option_counter=0
 // Update the page
 d3.select("#gameSelect").on("change", UpdatePage);
 // Function update the page content
@@ -39,26 +44,26 @@ function UpdatePage() {
     d3.select("#game-info-basic").html(""); // clear the previrous paragraphs
     // match the name with game info
     let selectedInfo=topGames.filter(game => game.game_name.includes(selectedGame));
-
     // output the game Info to DOM
     var gameInfoBox=selectedInfo[0];
     // console.log(gameInfoBox); // validate the selected game info
     Object.entries(gameInfoBox).forEach(([key,value])=> {
       if (key=='game_description') {
-        d3.select("#game-info-basic").append("p").append("strong").text(`Desciption: ${value}`);
+        d3.select("#game-info-basic").append("p").append("strong").text(`Desciption: \b${value}`);
       } else if (key=='yearpublished') {
-        d3.select("#game-info-basic").append("p").append("strong").text(`Published: ${value}`);
+        d3.select("#game-info-basic").append("p").append("strong").text(`Published: \b${value}`);
       } else if (key=='minage') {
-        d3.select("#game-info-basic").append("p").append("strong").text(`Min Player Age: ${value}`);
+        d3.select("#game-info-basic").append("p").append("strong").text(`Min Player Age: \b${value}`);
       } else if (key=='minplayers') {
-        d3.select("#game-info-basic").append("p").append("strong").text(`Min Players: ${value}`);
+        d3.select("#game-info-basic").append("p").append("strong").text(`Min Players: \b${value}`);
       } else if (key=='maxplayers') {
-        d3.select("#game-info-basic").append("p").append("strong").text(`Max Players: ${value}`);
+        d3.select("#game-info-basic").append("p").append("strong").text(`Max Players: \b${value}`);
       } else if (key=='gamelink') {
         d3.select("#game-info-basic").append("a").attr("href",`https://boardgamegeek.com${value}`).attr("id","game-link");
-        d3.select("#game-link").append("strong").append("p").text(`https://boardgamegeek.com${value}`);
-}
+        d3.select("#game-link").append("strong").append("p").text(`Game Link: \n https://boardgamegeek.com${value}`);
+      }
     });
+    //------------------------Plot-----------------------------------------------------------
     // find the publish year base on dropdown selection
     var selectedYear=+selectedInfo[0].yearpublished;
     // console.log(selectedYear);
@@ -67,12 +72,9 @@ function UpdatePage() {
     // console.log(selectedId);
     // get the games published in the same year as selected
     let yearGames=Object.values(jsGameData).filter(a=>a.yearpublished==+selectedInfo[0].yearpublished);
-    PlotBubble(selectedYear,yearGames);
     // Get the top 10 games from the games published in the same year
     yearGames.sort((a,b)=>b.average-a.average);
     // console.log(yearGames.slice(0,10));
-    PlotBar(selectedYear,yearGames.slice(0,10));
-    PlotRadar(yearGames.slice(0,10));
     // get the list for the ranking and time
     let rankingList=Object.entries(jsRankingData).map(([key,value]) => {
         var rank_date=value;
@@ -86,6 +88,9 @@ function UpdatePage() {
     });
     // console.log(rankingList);
     PlotLine (selectedGame,rankingList);
+    PlotBar(selectedYear,yearGames.slice(0,10));
+    PlotRadar(yearGames.slice(0,10));
+    PlotBubble(selectedYear,yearGames);
 };
 function PlotBar (year,games) {
     var data = [{
@@ -177,7 +182,7 @@ function PlotBubble(year, games){
   var layout = {
           title: `Games Published in ${year}`,
           font: {size: 12},
-          xaxis: {title: 'Number of Play Count from members', type:'log'},
+          xaxis: {title: 'Number of Play Counts from Members', type:'log'},
           yaxis: {title: 'Rating'},
           showlegend: false
       };
