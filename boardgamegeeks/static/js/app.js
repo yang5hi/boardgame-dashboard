@@ -1,38 +1,32 @@
+//-----------------prase the json data-------------------------------------------
 var jsNewsData = JSON.parse(newsData);
 var jsRankingData = JSON.parse(rankingData);
 var jsGameData = JSON.parse(gameData);
-// console.log(jsNewsData)
+// console.log(jsNewsData);
 // console.log(jsRankingData);
-
-// Initialize the page
+// console.log(jsGameData);
+// ---------------------------Initialize the page----------------------------------
 var newsTitle=Object.values(jsNewsData.news_title).filter(value=>value !=null)
 var imgUrl=Object.values(jsNewsData.featured_image_url).filter(value=>value !=null)
 // console.log(newsTitle);
 // console.log(imgUrl);
 d3.select(".card-title").text(`${newsTitle}`)
-
 d3.select("#news-image").attr("src",`${imgUrl}`)
 // store the top200 list to topGames variable
 var dropdownfrm=d3.select(".form-select")
 let topGames=Object.values(jsGameData).filter(a=>a.is_top200==true);
+// sort the game name to list to the dropdown
 topGames=topGames.sort(function(a, b) {
-  var nameA = a.game_name; // ignore upper and lowercase
-  var nameB = b.game_name; // ignore upper and lowercase
-  if (nameA < nameB) {
-    return -1;
-  }
-  if (nameA > nameB) {
-    return 1;
-  }
-  // names must be equal
-  return 0;
+  if (a.game_name < b.game_name) {return -1;}
+  if (a.game_name > b.game_name) {return 1;}
+  return 0;// names must be equal
 });
 // console.log(topGames);
-dropdownfrm.selectAll("option").remove()
+d3.select(".form-select").selectAll("option").remove()
 // apppend the game names to the dropdown menu
-topGames.forEach(game=> dropdownfrm.append("option").text(game.game_name));
-UpdatePage();
+topGames.forEach(game=> d3.select(".form-select").append("option").text(game.game_name));
 UpdateDate();
+UpdatePage();
 // Update the page
 d3.select("#gameSelect").on("change", UpdatePage);
 // Function update the page content
@@ -63,7 +57,7 @@ function UpdatePage() {
         d3.select("#game-link").append("strong").append("p").text(`Game Link: \n https://boardgamegeek.com${value}`);
       }
     });
-    //------------------------Plot-----------------------------------------------------------
+    //------------------------Update the Plots-----------------------------------------------------------
     // find the publish year base on dropdown selection
     var selectedYear=+selectedInfo[0].yearpublished;
     // console.log(selectedYear);
