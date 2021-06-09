@@ -8,10 +8,6 @@
   <title>Board Game Web App</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-    crossorigin="" />
   <!-- Bootswatch CSS -->
   <link rel="stylesheet" href="https://bootswatch.com/5/sketchy/bootstrap.min.css">
 </head>
@@ -27,7 +23,7 @@
           <div class="collapse navbar-collapse" id="navbarColor03">
             <ul class="navbar-nav me-auto">
               <li>
-                <a class="btn btn-primary" href="/scrape" role="button">Scrape the News and Load the Data</a>
+                Use the interactive charts below to explore the dataset
               </li>
             </ul>
           </div>
@@ -52,7 +48,7 @@
     <div class="row">
       <div class="col-md-12 jumbotron text-center">
         <h1><strong>Top 200 Board Game Dashboard</strong></h1>
-        <p>Use the interactive charts below to explore the dataset</p>
+        <a class="btn btn-primary" href="/scrape" role="button">Scrape the News and Load the Data</a>
       </div>
     </div>
     <br>
@@ -78,13 +74,13 @@
         </div>
         <div class="col-md-3">
           <div class="card text-white bg-info mb-3" id="latest_news">
-              <h3 class="card-header"><strong>BGG Latest News</strong></h3>
+              <h3 class="card-header"><strong>BGG News Blog</strong></h3>
               <div class="card-body">
-                <h5 class="card-title" href="https://boardgamegeek.com/blog/1/boardgamegeek-news">{{boardgame_data.news_title}}</h5>
+                <h5 class="card-title" href="https://boardgamegeek.com/blog/1/boardgamegeek-news"></h5>
               </div>
-              <img src={{boardgame_data.featured_image_url}} class="img-fluid" alt="Featured Game Image">
+              <img class="img-fluid" id="news-image" alt="Featured Game Image">
               <div class="card-footer">
-                <a href="https://boardgamegeek.com/blog/1/boardgamegeek-news"><p>Read More...</p></a>
+                <a href="https://boardgamegeek.com/blog/1/boardgamegeek-news"><h5>Read More...</h5></a>
               </div>
             </div>
         </div>
@@ -111,14 +107,14 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
   <!-- D3 JavaScript -->
   <script src="https://d3js.org/d3.v5.min.js"></script>
-
   <!-- Char.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>var boardgame_data='{{boardgame_data}}';</script>
 
   <!-- Our JavaScript -->
+  <script type="text/javascript">var newsData ='{{bggData[0]|tojson}}';</script>
+  <script type="text/javascript">var gameData ='{{bggData[1]|tojson}}';</script>
+  <script type="text/javascript">var rankingData ='{{bggData[2]|tojson}}';</script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='data/game_info.json') }}"></script>
 
 </body>
 
