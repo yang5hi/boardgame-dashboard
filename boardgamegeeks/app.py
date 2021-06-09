@@ -1,8 +1,6 @@
 from flask import Flask, render_template, redirect, jsonify
 from sqlalchemy import create_engine
 import pandas as pd
-import json
-import flask
 import bgg_sql
 
 # Create an instance of Flask

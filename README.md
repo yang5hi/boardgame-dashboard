@@ -22,7 +22,9 @@ The index.html page will load with
 
 
 
-![bottom](Images/bottom.png) One has to install PostgreSQL to use this flask-driven web scrapping. A database called boardgame_db has to be created to communicate with the flask. After that is done, run the app.py file and load the page to your local server.
+![bottom](Images/bottom.png) 
+One has to install PostgreSQL to use this flask-driven web scrapping. A database called boardgame_db has to be created to communicate with the flask. After that is done, run the app.py file and load the page to your local server. 
+![diagram] (Images/project_diagram.png)
 
 The bgg_csv folder contains all the game data available from Kaggle (see reference).
 
