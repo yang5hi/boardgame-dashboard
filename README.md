@@ -16,13 +16,13 @@ The index.html page will load with
    4. The minimum age requirement and language dependence (out of 10) were plotted on a radar chart. 
    5. Finally, there is the bubble plot. It shows all the games published in the same year as the selected game. The x-axis represents the number of play counts from the website members, and the y-axis is the rating. A tooltip shows the game name, min playtime, and min number of players. The color of the bubble is based on the number of players (1,2,3-4,4+ => green, blue, yellow, red). The size of the bubble is based on the minimum playtime required.
 
-![top](Images\top.png)
+![top](Images/top.png)
 
-![middle](Images\middle.png)
+![middle](Images/middle.png)
 
 
 
-![bottom](Images\bottom.png) One has to install PostgreSQL to use this flask-driven web scrapping. A database called boardgame_db has to be created to communicate with the flask. After that is done, run the app.py file and load the page to your local server.
+![bottom](Images/bottom.png) One has to install PostgreSQL to use this flask-driven web scrapping. A database called boardgame_db has to be created to communicate with the flask. After that is done, run the app.py file and load the page to your local server.
 
 The bgg_csv folder contains all the game data available from Kaggle (see reference).
 
