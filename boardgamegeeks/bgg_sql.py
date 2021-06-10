@@ -78,7 +78,7 @@ def scrape():
     a=game_info_df['description']
     kk=[]
     for b in a:
-        b=re.sub(r'[^\x20-\x7F]',r'', b)
+        b=re.sub(r'[^\x20-\x7F]',r' ', b)
         b=b.replace('"',"|")
         kk.append(b)
     game_info_df['game_description']=kk
