@@ -37,7 +37,7 @@ function UpdatePage() {
     // console.log(selectedGame); // validate game name
     d3.select("#game-info-basic").html(""); // clear the previrous paragraphs
     // match the name with game info
-    let selectedInfo=topGames.filter(game => game.game_name.includes(selectedGame));
+    let selectedInfo=topGames.filter(game => game.game_name==selectedGame);
     // output the game Info to DOM
     var gameInfoBox=selectedInfo[0];
     // console.log(gameInfoBox); // validate the selected game info
