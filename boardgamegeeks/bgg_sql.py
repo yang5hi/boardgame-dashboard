@@ -14,7 +14,7 @@ def scrape():
 
     # Create database connection
     # change the owner name, password and port number based on your local situation
-    # engine = create_engine(f'postgresql://{*database_owner}:{*password}@localhost:{*port}/housing_db')
+    # engine = create_engine(f'postgresql://{*database_owner}:{*password}@localhost:{*port}/boardgame_db')
     rds_connection_string = "postgres:Di2JieDu@n@localhost:5432/boardgame_db"
     engine = create_engine(f'postgresql://{rds_connection_string}')
 
@@ -37,6 +37,7 @@ def scrape():
     ranking_int_df['BoardGameRank'] = ranking_int_df.BoardGameRank.astype(str)
     ranking_200_df=ranking_int_df.head(200).copy()
     ranking_200_df.set_index('BoardGameRank', inplace=True)
+    ranking_int_df.set_index('BoardGameRank', inplace=True)
 
     # check if any game in the top 200 list is not the 20k game info list
     game_id_list=game_info_df['objectid']
@@ -55,7 +56,7 @@ def scrape():
         if game_id not in game_20k_set:
             print(f'{game_id} not found')
             game_out+=1
-    print(f'there are/is {game_out} game(s) from top 200 games that not cover in the 20k game info')
+    # print(f'there are/is {game_out} game(s) from top 200 games that not cover in the 20k game info')
 
     # add a column "is_top200" to game_info_df
     is_top200_list=[]
@@ -65,6 +66,9 @@ def scrape():
         else:
             is_top200_list.append(False)
     game_info_df['is_top200']=is_top200_list
+    # remove unused info for this project
+    game_info_df.loc[game_info_df.is_top200 == False, 'description'] = " "
+    
     # convert unicode to printable format
     a=game_info_df['name']
     kk=[]
@@ -93,8 +97,8 @@ def scrape():
     game_info_selected_df['objectid'] = game_info_selected_df.objectid.astype(str)
     game_info_selected_df.set_index('objectid', inplace=True)
     # Load dataframes into databases
-    ranking_200_df.to_sql(name = 'ranking_200', con = engine, if_exists = 'append', index = True)
+    ranking_int_df.to_sql(name = 'ranking_200', con = engine, if_exists = 'append', index = True)
     game_info_selected_df.to_sql(name = 'game_info', con = engine, if_exists = 'append', index = True)
     news_df.to_sql(name = 'news', con = engine, if_exists = 'append', index = False)
-    return [ranking_200_df,game_info_selected_df, news_df]
+    return [ranking_int_df,game_info_selected_df, news_df]
     

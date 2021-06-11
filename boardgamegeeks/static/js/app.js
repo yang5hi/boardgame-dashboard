@@ -43,7 +43,7 @@ function UpdatePage() {
     // console.log(gameInfoBox); // validate the selected game info
     Object.entries(gameInfoBox).forEach(([key,value])=> {
       if (key=='game_description') {
-        d3.select("#game-info-basic").append("p").append("strong").text(`Desciption: \b${value}`);
+        d3.select("#game-info-basic").append("p").append("strong").text(`Description: \b${value}`);
       } else if (key=='yearpublished') {
         d3.select("#game-info-basic").append("p").append("strong").text(`Published: \b${value}`);
       } else if (key=='minage') {
@@ -72,7 +72,7 @@ function UpdatePage() {
     // get the list for the ranking and time
     let rankingList=Object.entries(jsRankingData).map(([key,value]) => {
         var rank_date=value;
-        var wklRank=205;
+        let wklRank="";
         Object.entries(rank_date).filter(([key,value])=> {
           if (value==selectedId) {
             wklRank=key;
@@ -80,8 +80,13 @@ function UpdatePage() {
         });
         return [key, wklRank]
     });
+    rankingList=rankingList.filter(a=>a[1]>0);
+    var lineColor='#bb0300'
+    if (rankingList[0][1]-rankingList[rankingList.length-1][1]>=0) {
+      lineColor='rgb(64,239,182)';
+    };
     // console.log(rankingList);
-    PlotLine (selectedGame,rankingList);
+    PlotLine (selectedGame,rankingList,lineColor);
     PlotBar(selectedYear,yearGames.slice(0,10));
     PlotRadar(yearGames.slice(0,10));
     PlotBubble(selectedYear,yearGames);
@@ -182,20 +187,21 @@ function PlotBubble(year, games){
       };
   Plotly.newPlot('bubble', [trace1], layout);
 };
-function PlotLine(selectedGame,rankingList){
+function PlotLine(selectedGame,rankingList,lineColor){
   var trace1 = {
     x: rankingList.map(a=>a[0]),
     y: rankingList.map(a=>a[1]),
-    mode: 'line',
+    type:'scatter',
+    mode: 'lines',
     marker: {
-      color: 'rgb(64,239,182)',
+      color: lineColor,
       size: 6
     }
   };
   var layout = {
     title: `${selectedGame} ranking`,
-    xaxis: {title: 'Time'},
-    yaxis: {title: 'Game Ranking', range: [0,200]},
+    xaxis: {title: 'Time', type:'date'},
+    yaxis: {title: 'Game Ranking', autorange:"reversed"},
     showlegend: false,
   };
   Plotly.newPlot('line_popularity', [trace1],layout);
