@@ -166,13 +166,13 @@ function PlotBubble(year, games){
           marker: {
               color: games.map(a=> {
                 if (a.minplayers<=1) {
-                  return "#94de75";
+                  return "rgba(40,167,69,0.65)";
                 } else if (a.minplayers<=2) {
-                  return "#88b6f1";
+                  return "rgba((23,162,184,0.65)";
                 } else if (a.minplayers<=4) {
-                  return 'rgba(247, 202, 24, 0.5)';
+                  return 'rgba(255,193,7, 0.65)';
                 } else {
-                  return 'rgba(200,0,0,0.5)';
+                  return 'rgba(220,53,69,0.65)';
                 }
               }),
               size: games.map(a=>(a.minplaytime**0.6))
