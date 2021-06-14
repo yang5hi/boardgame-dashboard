@@ -4,18 +4,18 @@ BoardGameGeek is a valuable resource for boardgame information. We built a webpa
 ## Functionality
 The index.html page will load with 
 
-1. The latest Board Gaming News scrapped from boardgamegeek.com is loaded on a card on the right side of the HTML. It has the news title, image, link, and time information. Click the “Read More…” link to read the entire article.
+1. The latest Board Gaming News scrapped from boardgamegeek.com is loaded on a card on the right side of the HTML. It has the news title, image, link, and time information. Click the <Read More…> link to read the entire article.
 
-2. The "scrape the news and load the data" button will scrape the load the most up-to-date data.
+2. The [scrape the news and load the data] button will scrape the load the most up-to-date data.
 
-3. A user can choose a game from dropdown menu which consists games that made into the top 200 game list in the past 2.5 years. 
+3. A user can choose a game from a dropdown menu that consists of games that made into the top 200 game list in the past 2.5 years. 
 
 4. -  The game information board will load a brief description of the game, a minimum/maximum number of players, game link (functional), minimum ages of players, etc. 
-   -  The game ranking over time is shown on a line plot. A red line shows the game is currently trending downward, while a green line shows it is trending upward.
-   -  Based on the year of publishing of the selected game, the web page loads a bar graph with the top ten games with their average rankings. 
+   -  The game ranking over time is shown on a line plot. A red line shows the game is trending downward, while a green line shows it upward.
+   -  Based on the year of publishing the selected game, the web page loads a bar graph with the top ten games with their average rankings. 
    -  The minimum age requirement and language dependence (out of 10) were plotted on a radar chart. 
    -  Finally, there is the bubble plot. It shows all the games published in the same year as the selected game. The x-axis represents the number of play counts from the website members, and the y-axis is the rating. A tooltip shows the game name, min playtime, and min number of players. The color of the bubble is based on the number of players (1,2,3-4,4+ => green, blue, yellow, red). The size of the bubble is based on the minimum playtime required.
-   -  All columns of contents are responsive based on the size of the screen thanks to bootstrape. The line graph will shift to second row on a medium screen size, and the news will be the fist row when user load the page on a mobile device.
+   -  All columns of contents are responsive based on the size of the screen using bootstrap. The line graph will shift to the second row on medium screen size, and the news will be the first row when the user loads the page on a mobile device.
 
 ![top](Images/top.png)
 
